@@ -1,19 +1,32 @@
 var request = require('request');
 
 
-function rechercherColleguesParNom(nomRecherche, callback) {
+function rechercherColleguesParNom(nomRecherche, callback, callbackKo) {
 
     request(`https://remvia-collegues-api.herokuapp.com/collegues?nom=${nomRecherche}`, { json: true }, function(err, res, body) {
-
-        var temp = body;
+        if (err){
+            callbackKo("Connection server failed");
+        }else if (res.statusCode >= 400 && res.statusCode <= 499){
+            callbackKo('Erreur dans les informations de la requete');
+        }else if (res.statusCode <= 500 && res.statusCode <= 599){
+            callbackKo("Erreur coté serveur");
+        }
+        else{
+            callbackKo("Erreur non attendu");
+        }
+        var tabMatricule = body;
         tableauColleguesTrouves = [];
-        
-        temp.forEach(element => {
-        rechercherColleguesParMatricule(element,(colleguesTrouves) => {
+        var cpt = tabMatricule.length;//2 matricule
+        tabMatricule.forEach(matricule => {
+        rechercherColleguesParMatricule(matricule,(colleguesTrouves) => {
+            cpt--; //premier passage 1 //second passage 0
             tableauColleguesTrouves.push(colleguesTrouves);
-            callback(tableauColleguesTrouves);
-            })
+            if (cpt===0){
+                callback(tableauColleguesTrouves);
+            }
+            });
         });
+        
     });
 
     // à noter que la fonction ne retourne rien ici
@@ -23,9 +36,9 @@ function rechercherColleguesParNom(nomRecherche, callback) {
 function rechercherColleguesParMatricule(matricule,callback) {
     
     request("https://remvia-collegues-api.herokuapp.com/collegues/"+`${matricule}`, { json: true }, function(err, res, body) {
-        
-        var ColleguesTrouves = body;
-        callback(ColleguesTrouves);
+
+        var colleguesTrouves = body;
+        callback(colleguesTrouves);
     });
 
     // à noter que la fonction ne retourne rien ici
@@ -41,5 +54,5 @@ function creerUnCollegue(collegue){
     });
 }
 
-exports.test = rechercherColleguesParNom;
+exports.rechercherColleguesParNom = rechercherColleguesParNom;
 exports.creerCollegue = creerUnCollegue;

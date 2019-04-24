@@ -8,8 +8,9 @@ var rl = readline.createInterface({
 });
 
 
-var start = function () {
-
+var start = () => {
+    var str1 = "1. Rechercher un collègue par nom";
+    var str2 = "2. Créer un collègue";
     console.log("1. Rechercher un collègue par nom");
     console.log("2. Créer un collègue");
     console.log("99. Sortir");
@@ -17,13 +18,17 @@ var start = function () {
         if (saisie == 1) {
             rl.question('Donner un nom ! : ', function (saisieNom) {
                 console.log(`>> Recherche en cours du nom ${saisieNom}`);
-                service.test(saisieNom, (colleguesTrouves) =>{
+                service.rechercherColleguesParNom(saisieNom, (colleguesTrouves) =>{
                     // affichage du tableau des collègues trouvés
                     colleguesTrouves.forEach(element => {
                         console.log(`${element.nom} ${element.prenoms} ${element.dateDeNaissance}`);
                     });
+                    start();
+                },(messageErr) => {
+                    console.log('OOps :', messageErr);
+                    start();
                 });
-                start();
+                
             });
         }
         else if(saisie == 2){

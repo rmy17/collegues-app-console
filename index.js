@@ -1,4 +1,4 @@
-var start = require("./presentation.js");
+var presentation = require("./presentation.js");
 
 console.log('** Administration Collegues **');
-start.run();
+presentation.run();
