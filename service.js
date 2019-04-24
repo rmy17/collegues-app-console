@@ -23,7 +23,7 @@ function rechercherColleguesParNom(nomRecherche, callback) {
 function rechercherColleguesParMatricule(matricule,callback) {
     
     request("https://remvia-collegues-api.herokuapp.com/collegues/"+`${matricule}`, { json: true }, function(err, res, body) {
-
+        
         var ColleguesTrouves = body;
         callback(ColleguesTrouves);
     });
@@ -31,4 +31,15 @@ function rechercherColleguesParMatricule(matricule,callback) {
     // à noter que la fonction ne retourne rien ici
 }
 
+
+function creerUnCollegue(collegue){
+    request({
+        url : "https://remvia-collegues-api.herokuapp.com/collegues",
+        method : 'POST',
+        json : true,
+        body : collegue 
+    });
+}
+
 exports.test = rechercherColleguesParNom;
+exports.creerCollegue = creerUnCollegue;
