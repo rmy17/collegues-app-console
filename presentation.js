@@ -9,39 +9,82 @@ var rl = readline.createInterface({
 
 
 var start = () => {
-    var str1 = "1. Rechercher un collègue par nom";
-    var str2 = "2. Créer un collègue";
-    console.log("1. Rechercher un collègue par nom");
-    console.log("2. Créer un collègue");
-    console.log("99. Sortir");
-    rl.question('Faites un choix ? : ', function (saisie) {
+    var str1 = "1. Rechercher un collègue par nom\n";
+    var str2 = "2. Créer un collègue\n";
+    var str3 = "3. Créer un collègue\n";
+    var str99 = "99. Sortir";
+    console.log(str1 + str2 + str3 + str99);
+    rl.question('Faites un choix ? : ', (saisie) => {
         if (saisie == 1) {
-            rl.question('Donner un nom ! : ', function (saisieNom) {
+            rl.question('Donner un nom ! : ', (saisieNom) => {
                 console.log(`>> Recherche en cours du nom ${saisieNom}`);
-                service.rechercherColleguesParNom(saisieNom, (colleguesTrouves) =>{
+                service.rechercherColleguesParNom(saisieNom, (colleguesTrouves) => {
                     // affichage du tableau des collègues trouvés
-                    colleguesTrouves.forEach(element => {
-                        console.log(`${element.nom} ${element.prenoms} ${element.dateDeNaissance}`);
+                    colleguesTrouves.forEach(collegue => {
+                        console.log(`${collegue.nom} ${collegue.prenoms} ${collegue.dateDeNaissance} ${collegue.matricule}`);
                     });
                     start();
-                },(messageErr) => {
+                }, (messageErr) => {
                     console.log('OOps :', messageErr);
                     start();
                 });
-                
+
             });
         }
-        else if(saisie == 2){
-            function Collegue(nom,prenom,dateDeNaissance,photoUrl,email){
-                this.nom = nom;
-                this.prenoms = prenom;
-                this.dateDeNaissance = dateDeNaissance;
-                this.photoUrl = photoUrl;
-                this.email = email;
-            }
+        else if (saisie == 2) {
+            var collegue = {};
 
-            var collegue1 = new Collegue("Oddet","Rossi","2000-01-01","https://randomuser.me/api/portraits/men/76.jpg","fejfef@gmail.com");
-            service.creerCollegue(collegue1);
+            rl.question("Donner un nom ! : ", (saisieNom) => {
+                collegue.nom = saisieNom;
+                rl.question("Donner un prenom ! : ", (saisiePrenom) => {
+                    collegue.prenoms = saisiePrenom;
+                    rl.question('Donner une date de naisssance (yyyy-mm-jj) : ', (saisieDate) => {
+                        collegue.dateDeNaissance = saisieDate;
+                        rl.question("Donner une url de photo : ", (saisieUrlPhoto) => {
+                            collegue.photoUrl = saisieUrlPhoto;
+                            rl.question("Donner une adresse email: ", (saisieEmail) => {
+                                collegue.email = saisieEmail;
+                                service.creerCollegue(collegue, (collegueCree) => {
+                                    console.log(collegueCree);
+                                    start();
+                                }, (messageErr) => {
+                                    console.log('OOps :', messageErr);
+                                    start();
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+
+        } else if (saisie == 3) {
+            var col = {};
+            rl.question('Donner un nom ! : ', (saisieNom) => {
+                console.log(`>> Recherche en cours du nom ${saisieNom}`);
+                service.rechercherColleguesParNom(saisieNom, (colleguesTrouves) => {
+                    // affichage du tableau des collègues trouvés
+                    colleguesTrouves.forEach(collegue => {
+                        console.log(`${collegue.nom} ${collegue.prenoms} ${collegue.dateDeNaissance} ${collegue.matricule}`);
+                    });
+                }, (messageErr) => {
+                    console.log('OOps :', messageErr);
+                    start();
+                });
+                rl.question('Choisissez le nouvelle email : ', (saisieNewEmail) => {
+                    col.email = saisieNewEmail;
+                    rl.question('Choisissez le collegue à modifier : ', (saisieNumCollegue) => {
+                        console.log(colleguesTrouves[saisieNumCollegue].matricule);
+                        service.modifierEmail(colleguesTrouves[saisieNumCollegue].matricule, col, (collegueCree) => {
+                            console.log(collegueCree);
+                            start();
+                        }, (messageErr) => {
+                            console.log('OOps :', messageErr);
+                        });
+                    });
+                });
+
+            });
+
         }
         else if (saisie == 99) {
             console.log("Au revoir");
