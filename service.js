@@ -1,4 +1,4 @@
-var request = require('request');
+const request = require('request-promise-native');
 
 
 function rechercherColleguesParNom(nomRecherche, callback, callbackKo) {
@@ -14,9 +14,9 @@ function rechercherColleguesParNom(nomRecherche, callback, callbackKo) {
         else{
             callbackKo("Erreur non attendu");
         }
-        var tabMatricule = body;
+        let tabMatricule = body;
         tableauColleguesTrouves = [];
-        var cpt = tabMatricule.length;//2 matricule
+        let cpt = tabMatricule.length;//2 matricule
         tabMatricule.forEach(matricule => {
         rechercherColleguesParMatricule(matricule,(colleguesTrouves) => {
             cpt--; //premier passage 1 //second passage 0
@@ -37,7 +37,7 @@ function rechercherColleguesParMatricule(matricule,callback) {
     
     request(`https://remvia-collegues-api.herokuapp.com/collegues/${matricule}`, { json: true }, function(err, res, body) {
 
-        var colleguesTrouves = body;
+        let colleguesTrouves = body;
         callback(colleguesTrouves);
     });
 
@@ -53,7 +53,7 @@ function creerUnCollegue(collegue,callback,callbackKo){
         method : 'POST',
         json : true,
         body : collegue 
-    }, function(err,res,body){
+    }, (err,res,body)=>{
         if(err){
             callbackKo("Connection server failed");
         }else if (res.statusCode >= 400 && res.statusCode <= 499){
@@ -65,7 +65,7 @@ function creerUnCollegue(collegue,callback,callbackKo){
             callbackKo("Erreur non attendu");
         }
         
-        var collegureCree = body;
+        let collegureCree = body;
         callback(collegureCree);
        
     });
@@ -77,7 +77,7 @@ function modifierEmail(matricule, collegueAModifier, callback, callbackKo){
         method : 'PATCH',
         json : true,
         body : collegueAModifier
-    },function(err,res,body){
+    },(err,res,body)=>{
         if(err){
             callbackKo("Connection server failed");
         }else if (res.statusCode >= 400 && res.statusCode <= 499){
@@ -89,7 +89,7 @@ function modifierEmail(matricule, collegueAModifier, callback, callbackKo){
             callbackKo("Erreur non attendu");
         }
         
-        var collegureCree = body;
+        let collegureCree = body;
         callback(collegureCree);
        
     });

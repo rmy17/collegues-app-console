@@ -1,19 +1,19 @@
 // récupération du module `readline`
-var readline = require('readline');
-var service = require('./service.js');
+const readline = require('readline');
+const service = require('./service.js');
 // création d'un objet `rl` permettant de récupérer la saisie utilisateur
-var rl = readline.createInterface({
+const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
 
 
-var start = () => {
-    var str1 = "1. Rechercher un collègue par nom\n";
-    var str2 = "2. Créer un collègue\n";
-    var str3 = "3. Créer un collègue\n";
-    var str99 = "99. Sortir";
-    console.log(str1 + str2 + str3 + str99);
+const start = () => {
+    const str1 = "1. Rechercher un collègue par nom\n";
+    const str2 = "2. Créer un collègue\n";
+    const str3 = "3. Créer un collègue\n";
+    const str99 = "99. Sortir";
+    console.log(`${str1} ${str2} ${str3} ${str99}`);
     rl.question('Faites un choix ? : ', (saisie) => {
         if (saisie == 1) {
             rl.question('Donner un nom ! : ', (saisieNom) => {
@@ -32,7 +32,7 @@ var start = () => {
             });
         }
         else if (saisie == 2) {
-            var collegue = {};
+            let collegue = {};
 
             rl.question("Donner un nom ! : ", (saisieNom) => {
                 collegue.nom = saisieNom;
@@ -58,7 +58,7 @@ var start = () => {
             });
 
         } else if (saisie == 3) {
-            var col = {};
+            let col = {};
             rl.question('Donner un nom ! : ', (saisieNom) => {
                 console.log(`>> Recherche en cours du nom ${saisieNom}`);
                 service.rechercherColleguesParNom(saisieNom, (colleguesTrouves) => {
