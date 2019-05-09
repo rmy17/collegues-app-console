@@ -9,8 +9,13 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
+const authenti = () => {
+    rl.question('Donner un nom ! : ', (saisieMail => {
+        console.log(`>> Recherche en cours du nom ${saisieMail}`);
+}
 
 const start = () => {
+
     const str1 = "1. Rechercher un collègue par nom\n";
     const str2 = "2. Créer un collègue\n";
     const str3 = "3. Modifier l'email d'un collègue \n";
@@ -22,7 +27,7 @@ const start = () => {
             rl.question('Donner un nom ! : ', (saisieNom) => {
                 console.log(`>> Recherche en cours du nom ${saisieNom}`);
                 service.rechercherColleguesParNom(saisieNom).then(tabResultats => {
-                    tabResultats.forEach((collegue:any) => {
+                    tabResultats.forEach((collegue:any) : void => {
                         console.log(`${collegue.nom} ${collegue.prenoms} ${collegue.dateDeNaissance} ${collegue.matricule}`);
                     });
                     start();
@@ -98,7 +103,7 @@ const start = () => {
     let url:any = {};
     rl.question("Donner un nom ! : ", (saisieNom) => {
         service.rechercherColleguesParNom(saisieNom).then(tabResultats => {
-            tabResultats.forEach((collegue:any) => {
+            tabResultats.forEach((collegue:any) :any => {
                 console.log(`${collegue.nom} ${collegue.prenoms} ${collegue.dateDeNaissance} ${collegue.matricule}`);
             });
             return tabResultats;

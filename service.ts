@@ -1,11 +1,14 @@
 import * as request from 'request-promise-native';
 
+const req = request.defaults({jar: true})
+
+
  export class Service {
 
 
     rechercherColleguesParNom(nomRecherche) {
 
-        return request(`https://remvia-collegues-api.herokuapp.com/collegues?nom=${nomRecherche}`, { json: true })
+        return req(`https://remvia-collegues-api.herokuapp.com/collegues?nom=${nomRecherche}`, { json: true })
             .then(
                 tabMatricules => {
 
@@ -22,7 +25,7 @@ import * as request from 'request-promise-native';
     rechercherColleguesParMatricule(matricule) {
 
 
-        return request(`https://remvia-collegues-api.herokuapp.com/collegues/${matricule}`, {
+        return req(`https://remvia-collegues-api.herokuapp.com/collegues/${matricule}`, {
             json: true
         });
         // à noter que la fonction ne retourne rien ici
@@ -32,7 +35,7 @@ import * as request from 'request-promise-native';
     creerUnCollegue(collegue) {
 
 
-        return request({
+        return req({
             url: "https://remvia-collegues-api.herokuapp.com/collegues",
             method: 'POST',
             json: true,
